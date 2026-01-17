@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateNewsDto {
+export class UpdateNewsDto {
   @IsString()
   @IsOptional()
   @MinLength(4, { message: 'Минимальное кол-во символов' })

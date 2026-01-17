@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { NewsCategoriesModule } from './modules/news-categories/news-categories.module';
 import { NewsModule } from './modules/news/news.module';
+import { CallbacksModule } from './modules/callbacks/callbacks.module';
 import * as path from 'path';
 import * as Joi from 'joi';
 
@@ -50,6 +51,7 @@ import * as Joi from 'joi';
     UsersModule,
     NewsCategoriesModule,
     NewsModule,
+    CallbacksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

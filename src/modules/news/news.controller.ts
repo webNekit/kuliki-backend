@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { NewsService } from './news.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateNewsDto } from './dto/create-news.dto';
@@ -10,6 +10,7 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { AppRole } from 'src/common/types/index.type';
 import { NewsQueryParams } from './types/index.type';
+import { UpdateNewsDto } from './dto/update-news.dto';
 
 @Controller('news')
 export class NewsController {
@@ -19,11 +20,26 @@ export class NewsController {
   ) {}
 
   @Post()
-  @Roles(AppRole.USER)
+  @Roles(AppRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @UseInterceptors(FileInterceptor('image', multerImageOptions(new ConfigService())))
+  @UseInterceptors(FileInterceptor('image'))
   async create(@Body() dto: CreateNewsDto, @UploadedFile() file: Express.Multer.File, @CurrentUser('userId') authorId: string) {
     return this.newsService.create(dto, file, authorId);
+  }
+
+  @Patch(':id')
+  @Roles(AppRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image', multerImageOptions(new ConfigService())))
+  async update(@Param('id') id: string, @Body() dto: UpdateNewsDto, @UploadedFile() file?: Express.Multer.File) {
+    return this.newsService.update(id, dto, file);
+  }
+
+  @Delete(':id')
+  @Roles(AppRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async remove(@Param('id') id: string) {
+    return this.newsService.remove(id);
   }
 
   @Get()
@@ -36,5 +52,10 @@ export class NewsController {
       sortBy: query.sortBy,
       order: query.order,
     });
+  }
+
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string) {
+    return this.newsService.findOne(slug);
   }
 }
