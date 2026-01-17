@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCallbackDto } from './dto/create-callback.dto';
-import { CallbackResponseList, CallbackResponseType } from './types/index.type';
+import { CallbackResponseList } from './types/index.type';
 import { RequestWithUser } from 'src/common/types/index.type';
 
 @Injectable()
